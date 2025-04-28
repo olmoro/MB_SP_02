@@ -1,10 +1,7 @@
 /*
-  Файл   board.h
+  Файл board.h
   Проект
-  pcb: spn.55
-
-  OTA: "Я реализовал вариант обновления с сервера TLS. Используется шифрование 
-  и проверка допустимости версий. Мне это подходит больше."
+  pcb: spn.55 
 */
 
 #ifndef _BOARD_H_
@@ -31,8 +28,6 @@ extern "C"
 
     void flagA();
     void flagB();
-    // void flagA(int);
-    // void flagB(int);
 
 #ifdef __cplusplus
 }

@@ -21,14 +21,6 @@ void app_main(void)
     uart_mb_init();
     uart_sp_init();
 
-    // // Инициализация примитивов синхронизации
-    // uart1_mutex = xSemaphoreCreateMutex();
-    // uart2_mutex = xSemaphoreCreateMutex();
-
-    // // Настройка очередей UART (если нужно)
-    // uart_driver_install(MB_PORT_NUM, UART_BUF_SIZE, UART_BUF_SIZE, 10, &uart1_queue, 0);
-    // uart_driver_install(SP_PORT_NUM, UART_BUF_SIZE, UART_BUF_SIZE, 10, &uart2_queue, 0);
-
     // Создание задач
     xTaskCreate(uart1_task, "UART1 Task", 4096, NULL, 5, NULL);
     xTaskCreate(uart2_task, "UART2 Task", 4096, NULL, 5, NULL);     // 6

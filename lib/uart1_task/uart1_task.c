@@ -47,7 +47,7 @@ uint8_t sp_request = 0x86;  // адрес sp-запросчика (предпо�
 uint8_t sp_reply = 0x00;    // адрес sp-ответчика (предположительно)
 uint8_t sp_comm = 0x03;     // команда (sp-функция) (предположительно)
 
-/* Данные пакета пакета modbus при ошибке */
+/* Данные пакета modbus при ошибке */
 uint8_t error_mb[5];
 uint8_t error_mb_len = sizeof(error_mb);
 
@@ -105,10 +105,9 @@ void uart1_task(void *arg)
         int len = uart_read_bytes(MB_PORT_NUM, temp_buf, sizeof(temp_buf), pdMS_TO_TICKS(20));
         flagB();            
 
+        // Проверка целостности пакета
         if (len > 0)
         {
-            // Проверка целостности пакета
-
             // Начало нового фрейма
             if (frame_buffer == NULL)
             {
@@ -163,7 +162,7 @@ void uart1_task(void *arg)
                 continue;
             }
 
-            // Проверка CRC
+            // Проверка MB_CRC
             uint16_t received_crc = (frame_buffer[frame_length - 1] << 8) | frame_buffer[frame_length - 2];
             uint16_t calculated_crc = mb_crc16(frame_buffer, frame_length - 2);
 
@@ -177,6 +176,8 @@ void uart1_task(void *arg)
             }
 
             ESP_LOGI(TAG, "MB CRC OK");
+
+            ledsGreen();
 
             switch (frame_buffer[1])
             {
@@ -247,7 +248,9 @@ void uart1_task(void *arg)
             }
             else
             {
-                generate_error(0x01);   // 0x01 - Недопустимая функция
+                ledsRed();
+
+                generate_error(0x04);   // 0x01 - Недопустимая функция
                 xSemaphoreTake(uart1_mutex, portMAX_DELAY);
                 uart_write_bytes(MB_PORT_NUM, (const char *)error_mb, sizeof(error_mb));
                 xSemaphoreGive(uart1_mutex);

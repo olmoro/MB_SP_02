@@ -27,7 +27,7 @@ static SemaphoreHandle_t uart1_mutex = NULL;
 static SemaphoreHandle_t uart2_mutex = NULL;
 
 extern uint8_t mb_addr; // адрес MB-slave
-extern uint8_t mb_comm; // команда ( MB-функция)
+extern uint8_t mb_comm; // команда ( MB-функция?)
 
 extern uint8_t sp_request;  // 0x86  адрес sp-запросчика (предположительно)
 extern uint8_t sp_reply;    // 0x00  адрес sp-ответчика (предположительно)
@@ -43,7 +43,7 @@ static void generate_error(uint8_t error_code)
     error_sp[1] = mb_comm |= 0x80;  // Функция
     error_sp[2] = error_code;       // Код ошибки
 
-    /* Расчет CRC для ответа */
+    /* Расчет MB_CRC для ответа */
     uint16_t error_sp_crc = mb_crc16(error_sp, error_sp_len - 2);
     error_sp[3] = error_sp_crc & 0xFF; // 3
     error_sp[4] = error_sp_crc >> 8;   // 4
@@ -88,10 +88,9 @@ void uart2_task(void* arg)
 
         int len = uart_read_bytes(SP_PORT_NUM, temp_buf, sizeof(temp_buf), pdMS_TO_TICKS(10));
 
+        // Проверка целостности пакета
         if(len > 0) 
         {
-            // Проверка целостности пакета
-
             // Начало нового фрейма
             if (frame_buffer == NULL)
             {
@@ -169,8 +168,8 @@ void uart2_task(void* arg)
             ESP_LOGI(TAG, "SP CRC OK");
 
             // Из frame_buffer исключаются первые (FF FF) и последние (CRC) байты
-            bytes = frame_length - 4;                                               // Пакет будет на 4 байта короче
-            memmove(frame_buffer, frame_buffer + 2, bytes);                         // сдвиг на 2 байта
+            bytes = frame_length - 4;                                // Пакет будет на 4 байта короче
+            memmove(frame_buffer, frame_buffer + 2, bytes);          // сдвиг на 2 байта
 
             // ESP_LOGI(TAG, "length %d bytes:", bytes);
             // for (int i = 0; i < bytes; i++)
@@ -210,12 +209,12 @@ void uart2_task(void* arg)
                 // }
                 // printf("\n");
 
-                /* Расчет CRC для ответа */
+                /* Расчет MB_CRC для ответа */
                 uint16_t responce_mb_crc = mb_crc16(responce, bytes);
-                responce[bytes + 1] = responce_mb_crc & 0xFF;   // 3
-                responce[bytes + 2] = responce_mb_crc >> 8;     // 4
+                responce[bytes + 1] = responce_mb_crc & 0xFF;   // мл
+                responce[bytes + 2] = responce_mb_crc >> 8;     // ст
 
-                bytes += 2; // Добавлена CRC
+                bytes += 2; // Добавлены байты CRC
 
                 // ESP_LOGI(TAG, "responce (%d bytes):", bytes);
                 // for (int i = 0; i < bytes; i++)
@@ -230,6 +229,7 @@ void uart2_task(void* arg)
                 uart_write_bytes(MB_PORT_NUM, (const char *)responce, bytes);
                 xSemaphoreGive(uart1_mutex);
                     // 01 10 00 1F 01 86 00 1F 03 33 33 32 02 09 30 09 30 30 33 0C 09 32 30 36 30 31 30 30 30 30 35 09 20 0C 03 00 7F 
+                
                 // Освобождение памяти
                 free(responce);
 

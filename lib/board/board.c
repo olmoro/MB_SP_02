@@ -36,8 +36,7 @@ void boardInit()
 
     /* Установка начального состояния (выключено) */
     gpio_set_level(_rgb_red_gpio, 0);
-    gpio_set_level(_rgb_green_gpio, 0);
-    gpio_set_level(_rgb_blue_gpio, 0);
+    gpio_set_level(_rgb_green_gpio, 1);     // on
     gpio_set_level(_rgb_blue_gpio, 0);
     gpio_set_level(_flag_a_gpio, 0);
     gpio_set_level(_flag_b_gpio, 0);
@@ -159,15 +158,3 @@ void flagB()
     else
         gpio_set_level(_flag_b_gpio, 1);
 }
-
-// void flagA(int a)
-// {
-//     if(a > 0) gpio_set_level(_flag_a_gpio, 1);
-//     else  gpio_set_level(_flag_a_gpio, 0);
-// }
-
-// void flagB(int b)
-// {
-//     if(b > 0) gpio_set_level(_flag_b_gpio, 1);
-//     else  gpio_set_level(_flag_b_gpio, 0);
-// }

@@ -3,12 +3,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
+#include "nvs.h"
 #include "esp_log.h"
 #include "driver/uart.h"
 #include "project_config.h"
 #include "board.h"
 #include "uart1_task.h"
 #include "uart2_task.h"
+#include "nvs_settings.h"
 
 static const char *TAG = "UART Gateway";
 // static QueueHandle_t uart1_queue, uart2_queue;
@@ -16,6 +18,9 @@ static const char *TAG = "UART Gateway";
 
 void app_main(void)
 {
+    // Инициализация NVS
+    nvs_init_modbus_settings();
+    
     // Инициализация периферии
     boardInit();
     uart_mb_init();

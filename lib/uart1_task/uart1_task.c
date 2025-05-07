@@ -36,11 +36,11 @@ static SemaphoreHandle_t uart1_mutex, uart2_mutex;
 static SemaphoreHandle_t uart1_mutex = NULL;
 static SemaphoreHandle_t uart2_mutex = NULL;
 
-    // Считанные из NVS
-    extern uint8_t nvs_mb_addr; // = MODBUS_FACTORY_ADDR;
-    extern uint32_t nvs_mb_speed;   // = MODBUS_FACTORY_SPEED;
-    extern uint8_t nvs_sp_addr;  // = SP_FACTORY_ADDR;
-    extern uint32_t nvs_sp_speed;  // = SP_FACTORY_SPEED;
+// Считанные из NVS
+extern uint8_t nvs_mb_addr;
+// extern uint32_t nvs_mb_speed;
+// extern uint8_t nvs_sp_addr;
+//extern uint32_t nvs_sp_speed;
 
 /* Данные исходной посылки сохраняются для генерации ответного пакета modbus */
 //uint8_t mb_addr = 0x00;     // [0] адрес mb-slave

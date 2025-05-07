@@ -26,10 +26,11 @@
 
 static const char *TAG = "NVS";
 
-uint8_t nvs_mb_addr = MODBUS_FACTORY_ADDR;
-uint32_t nvs_mb_speed = MODBUS_FACTORY_SPEED;
-uint8_t nvs_sp_addr = SP_FACTORY_ADDR;
-uint32_t nvs_sp_speed = SP_FACTORY_SPEED;
+// Считанные с NVS параметры
+uint8_t nvs_mb_addr;
+uint32_t nvs_mb_speed;
+uint8_t nvs_sp_addr;
+uint32_t nvs_sp_speed;
 
 void nvs_init_modbus_settings()
 {

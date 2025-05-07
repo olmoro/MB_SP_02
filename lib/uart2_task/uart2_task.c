@@ -30,11 +30,11 @@ static SemaphoreHandle_t uart2_mutex = NULL;
 //extern uint8_t mb_addr; // адрес MB-slave
 extern uint8_t mb_comm; // команда ( MB-функция?)
 
-    // Считанные из NVS
-    extern uint8_t nvs_mb_addr; // = MODBUS_FACTORY_ADDR;
-    // extern uint32_t nvs_mb_speed;   // = MODBUS_FACTORY_SPEED;
-    // extern uint8_t nvs_sp_addr;  // = SP_FACTORY_ADDR;
-    // extern uint32_t nvs_sp_speed;  // = SP_FACTORY_SPEED;
+// Считанные из NVS
+extern uint8_t nvs_mb_addr;
+// extern uint32_t nvs_mb_speed;
+// extern uint8_t nvs_sp_addr;
+// extern uint32_t nvs_sp_speed;
 
 extern uint8_t sp_request;  // 0x86  адрес sp-запросчика (предположительно)
 extern uint8_t sp_reply;    // 0x00  адрес sp-ответчика (предположительно)
@@ -46,7 +46,7 @@ uint8_t error_sp_len = sizeof(error_sp);
 // Генерация MODBUS ошибки
 static void generate_error(uint8_t error_code)
 {
-    error_sp[0] = nvs_mb_addr;          // Адрес
+    error_sp[0] = nvs_mb_addr;      // Адрес
     error_sp[1] = mb_comm |= 0x80;  // Функция
     error_sp[2] = error_code;       // Код ошибки
 

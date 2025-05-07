@@ -27,6 +27,7 @@
 #include "driver/uart.h"
 #include "mb_crc.h"
 #include "sp_crc.h"
+#include "nvs_settings.h"
 
 static const char *TAG = "UART1 Gateway";
 
@@ -35,8 +36,14 @@ static SemaphoreHandle_t uart1_mutex, uart2_mutex;
 static SemaphoreHandle_t uart1_mutex = NULL;
 static SemaphoreHandle_t uart2_mutex = NULL;
 
+    // Считанные из NVS
+    extern uint8_t nvs_mb_addr; // = MODBUS_FACTORY_ADDR;
+    extern uint32_t nvs_mb_speed;   // = MODBUS_FACTORY_SPEED;
+    extern uint8_t nvs_sp_addr;  // = SP_FACTORY_ADDR;
+    extern uint32_t nvs_sp_speed;  // = SP_FACTORY_SPEED;
+
 /* Данные исходной посылки сохраняются для генерации ответного пакета modbus */
-uint8_t mb_addr = 0x00;     // [0] адрес mb-slave
+//uint8_t mb_addr = 0x00;     // [0] адрес mb-slave
 uint8_t mb_comm = 0x00;     // [1] команда (mb-функция)
 uint16_t mb_reg = 0x0000;   // [2,3]
 uint16_t mb_regs = 0x0000;  // [4,5]
@@ -54,7 +61,7 @@ uint8_t error_mb_len = sizeof(error_mb);
 // Генерация MODBUS ошибки (сокращённый формат)
 static void generate_error(uint8_t error_code)
 {
-    error_mb[0] = mb_addr;          // Адрес
+    error_mb[0] = nvs_mb_addr;          // Адрес
     error_mb[1] = mb_comm |= 0x80;  // Функция
     error_mb[2] = error_code;       // Код ошибки
 
@@ -153,7 +160,7 @@ void uart1_task(void *arg)
             }
 
             // Проверка адреса
-            if (frame_buffer[0] != SLAVE_ADDRESS)
+            if (frame_buffer[0] != nvs_mb_addr)     //  SLAVE_ADDRESS)
             {
                 ESP_LOGW(TAG, "Address mismatch: 0x%02X", frame_buffer[0]);
                 free(frame_buffer);
@@ -183,7 +190,7 @@ void uart1_task(void *arg)
             {
             case 0x10:
                 // сохранить адрес и команду для ответа
-                mb_addr = frame_buffer[0];
+            //    mb_addr = frame_buffer[0];
                 mb_comm = frame_buffer[1];
                 /* Из-за терминала (он оперирует 16-битовым типом) приходится 
                    вводить чётное количество байтов в тестовом пакете, и последний

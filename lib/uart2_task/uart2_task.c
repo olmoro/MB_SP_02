@@ -7,6 +7,7 @@
 #include "board.h"
 #include "destaff.h"
 #include "project_config.h"
+#include "nvs_settings.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdint.h> // for standard int types definition
@@ -26,8 +27,14 @@ static SemaphoreHandle_t uart1_mutex, uart2_mutex;
 static SemaphoreHandle_t uart1_mutex = NULL;
 static SemaphoreHandle_t uart2_mutex = NULL;
 
-extern uint8_t mb_addr; // адрес MB-slave
+//extern uint8_t mb_addr; // адрес MB-slave
 extern uint8_t mb_comm; // команда ( MB-функция?)
+
+    // Считанные из NVS
+    extern uint8_t nvs_mb_addr; // = MODBUS_FACTORY_ADDR;
+    // extern uint32_t nvs_mb_speed;   // = MODBUS_FACTORY_SPEED;
+    // extern uint8_t nvs_sp_addr;  // = SP_FACTORY_ADDR;
+    // extern uint32_t nvs_sp_speed;  // = SP_FACTORY_SPEED;
 
 extern uint8_t sp_request;  // 0x86  адрес sp-запросчика (предположительно)
 extern uint8_t sp_reply;    // 0x00  адрес sp-ответчика (предположительно)
@@ -39,7 +46,7 @@ uint8_t error_sp_len = sizeof(error_sp);
 // Генерация MODBUS ошибки
 static void generate_error(uint8_t error_code)
 {
-    error_sp[0] = mb_addr;          // Адрес
+    error_sp[0] = nvs_mb_addr;          // Адрес
     error_sp[1] = mb_comm |= 0x80;  // Функция
     error_sp[2] = error_code;       // Код ошибки
 
@@ -194,7 +201,7 @@ void uart2_task(void* arg)
                 // bytes: mb_addr mb_comm bytes_h,l <- bytes -> mb-crc_h,l =- bytes + 6
                 uint8_t *responce = malloc(bytes + 6);
 
-                responce[0] = mb_addr;          // Адрес;
+                responce[0] = nvs_mb_addr;          // Адрес;
                 responce[1] = mb_comm;          // Функция;
                 responce[2] = bytes >> 8;       // bytes_h 
                 responce[3] = bytes & 0xFF;     // bytes_l

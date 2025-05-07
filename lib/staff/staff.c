@@ -27,7 +27,7 @@
 #define STX 0x02 // начало тела сообщения
 #define ETX 0x03 // конец тела сообщения
 
-static const char *TAG = "STAFF";
+// static const char *TAG = "STAFF";
 
 int staff(const uint8_t *input, size_t input_len, uint8_t *output, size_t output_max_len)
 {

@@ -1,9 +1,6 @@
 #ifndef _NVS_SETTINGS_H_
 #define _NVS_SETTINGS_H_
 
-// #include <stdint.h>
-// #include "freertos/FreeRTOS.h"
-
 #ifdef __cplusplus
 extern "C"
 {

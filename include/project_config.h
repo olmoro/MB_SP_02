@@ -17,7 +17,7 @@
 // ---------------------------------------------------------------------------------
 //                                  Версии
 // ---------------------------------------------------------------------------------
-#define APP_VERSION "MB_SP_02 20250506.03"
+#define FIRMWARE_VERSION "MB_SP_02.04"
 // 202500506.06:  add nvs init   без подключения            RAM:  3.5%  Flash: 14.5%
 // 202500422.06:  Без printf()                              RAM:  3.5%  Flash: 13.1%
 
@@ -58,6 +58,20 @@
 
 
 // ---------------------------------------------------------------------------------
+//                             Заводские настройки
+// ---------------------------------------------------------------------------------
+                        // Укажите версию прошивки в файле конфигурации (sdkconfig.h)
+                        // #define FIRMWARE_VERSION CONFIG_FIRMWARE_VERSION
+                     //   #define FIRMWARE_VERSION "100"
+
+// Заводские настройки Modbus
+#define MODBUS_FACTORY_ADDR  1
+#define MODBUS_FACTORY_SPEED 9600
+
+// Заводские настройки SP
+#define SP_FACTORY_ADDR  0
+#define SP_FACTORY_SPEED 115200
+// ---------------------------------------------------------------------------------
 //                                    Общие
 // ---------------------------------------------------------------------------------
 #define BUF_SIZE (240) // размер буфера
@@ -74,11 +88,11 @@
 #define MB_PORT_NUM UART_NUM_1
 #define MB_BAUD_RATE 9600
 
-#ifdef SLAVE_ADDRESS_2
-   #define SLAVE_ADDRESS 0x01 + 1
-#else
-   #define SLAVE_ADDRESS 0x01
-#endif
+// #ifdef SLAVE_ADDRESS_2
+//    #define SLAVE_ADDRESS 0x01 + 1
+// #else
+//    #define SLAVE_ADDRESS 0x01
+// #endif
 
 #define MB_QUEUE_SIZE 2
 #define MB_FRAME_TIMEOUT_MS 4 // 3.5 символа при 19200 бод

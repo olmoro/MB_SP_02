@@ -6,6 +6,7 @@
 
 #include "board.h"
 #include "project_config.h"
+#include "nvs_settings.h"
 #include <stdio.h>
 #include "driver/gpio.h"
 #include "driver/ledc.h"
@@ -14,6 +15,12 @@
 #include "driver/uart.h"
 
 static const char *TAG = "BOARD";
+
+    // Считанные из NVS
+    // extern uint8_t nvs_mb_addr; // = MODBUS_FACTORY_ADDR;
+  //  extern uint32_t nvs_mb_speed;   // = MODBUS_FACTORY_SPEED;
+    // extern uint8_t nvs_sp_addr;  // = SP_FACTORY_ADDR;
+    extern uint32_t nvs_sp_speed;  // = SP_FACTORY_SPEED;
 
 gpio_num_t _rgb_red_gpio = RGB_RED_GPIO;
 gpio_num_t _rgb_green_gpio = RGB_GREEN_GPIO;
@@ -42,11 +49,16 @@ void boardInit()
     gpio_set_level(_flag_b_gpio, 0);
 }
 
+
+
+
+
 void uart_mb_init()
 {
     /* Configure parameters of an UART driver, communication pins and install the driver */
-    uart_config_t uart_mb_config = {
-        .baud_rate = MB_BAUD_RATE,
+    uart_config_t uart_mb_config = 
+    {
+        .baud_rate = MODBUS_FACTORY_SPEED,  //      nvs_mb_speed,  //    MB_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
@@ -66,7 +78,7 @@ void uart_sp_init()
     /* Configure parameters of an UART driver, communication pins and install the driver */
     uart_config_t uart_sp_config = 
     {
-        .baud_rate = SP_BAUD_RATE,
+        .baud_rate = (int)nvs_sp_speed,  //  SP_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,

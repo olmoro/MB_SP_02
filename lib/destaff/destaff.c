@@ -26,12 +26,12 @@ FNC  байт кода функции,
 CRC1, CRC2  циклические контрольные коды
 */
 
-static const char *TAG = "DESTAFF";
+// static const char *TAG = "DESTAFF";
 
 int deStaff(uint8_t *input, size_t len) // input одновременно и output
 {
     // Проверка валидности входных аргументов
-    if (input == NULL || len == NULL)
+    if (input == NULL || len == 0)
         return 0;
 
     if (len < BUF_MIN_SIZE || len > BUF_SIZE * 2)

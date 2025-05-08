@@ -39,7 +39,7 @@
 #define RGB_BLUE_GPIO 27 // Синий,   катод на GND (4mA)
 
 // Входы
-// #define CONFIG_GPIO_IR 19 // Вход ИК датчика
+// #define CONFIG_GPIO_IR 19 // Вход ИК датчика (резерв)
 
 // UART1
 #define CONFIG_MB_UART_RXD 25
@@ -60,9 +60,6 @@
 // ---------------------------------------------------------------------------------
 //                             Заводские настройки
 // ---------------------------------------------------------------------------------
-                        // Укажите версию прошивки в файле конфигурации (sdkconfig.h)
-                        // #define FIRMWARE_VERSION CONFIG_FIRMWARE_VERSION
-                     //   #define FIRMWARE_VERSION "100"
 
 // Заводские настройки Modbus
 #define MODBUS_FACTORY_ADDR  1

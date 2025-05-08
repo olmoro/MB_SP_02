@@ -20,7 +20,7 @@ void app_main(void)
 {
     // Инициализация NVS
     nvs_init_modbus_settings();
-    
+
     // Инициализация периферии
     boardInit();
     uart_mb_init();
@@ -28,7 +28,7 @@ void app_main(void)
 
     // Создание задач
     xTaskCreate(uart1_task, "UART1 Task", 4096, NULL, 5, NULL);
-    xTaskCreate(uart2_task, "UART2 Task", 4096, NULL, 5, NULL);     // 6
+    xTaskCreate(uart2_task, "UART2 Task", 4096, NULL, 5, NULL);
 
     ESP_LOGI(TAG, "System initialized");
 

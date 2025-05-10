@@ -1,0 +1,5 @@
+dependencies:
+  espressif/esp-modbus:
+    version: "1.0.17"
+  mb_example_common:
+    path: ${IDF_PATH}/examples/protocols/modbus/mb_example_common
